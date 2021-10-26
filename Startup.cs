@@ -1,3 +1,4 @@
+using Commander.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +26,9 @@ namespace Commander
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
+            // This maps every call to ICommanderRepo to MockCommanderRepo
+            services.AddScoped<ICommanderRepo, MockCommanderRepo>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

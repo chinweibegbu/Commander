@@ -16,7 +16,16 @@ namespace Commander.Controllers
     [ApiController]
     public class CommandsController : ControllerBase
     {
-        private readonly MockCommanderRepo _repository = new MockCommanderRepo();
+        /* Alternative (1): Directly interface with an implementation of the repository interface 
+        * >> private readonly MockCommanderRepo _repository = new MockCommanderRepo();
+        */
+        private readonly ICommanderRepo _repository;
+
+        // Alternative (2): Use dependency injection
+        public CommandsController(ICommanderRepo repository)
+        {
+            _repository = repository;
+        }
 
         // GET api/commands
         [HttpGet]
