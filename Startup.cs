@@ -28,7 +28,7 @@ namespace Commander
         {
             services.AddDbContext<CommanderContext>(opt => opt.UseSqlServer
             (Configuration.GetConnectionString("CommanderConnection")));
-;
+
             services.AddControllers();
             
             // This maps every call to ICommanderRepo to MockCommanderRepo
