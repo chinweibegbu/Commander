@@ -29,7 +29,10 @@ namespace Commander
             services.AddDbContext<CommanderContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("CommanderConnection")));
 
             services.AddControllers();
-            
+
+            // Allows the use of IMapper in the controller
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             // This maps every call to ICommanderRepo to MockCommanderRepo
             services.AddScoped<ICommanderRepo, SqlCommanderRepo>();
         }

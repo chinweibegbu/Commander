@@ -1,4 +1,6 @@
-﻿using Commander.Data;
+﻿using AutoMapper;
+using Commander.Data;
+using Commander.DTOs;
 using Commander.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,11 +22,13 @@ namespace Commander.Controllers
         * >> private readonly MockCommanderRepo _repository = new MockCommanderRepo();
         */
         private readonly ICommanderRepo _repository;
+        private readonly IMapper _mapper;
 
         // Alternative (2): Use dependency injection
-        public CommandsController(ICommanderRepo repository)
+        public CommandsController(ICommanderRepo repository, IMapper mapper)
         {
-            _repository = repository;
+            _repository = repository;   // Dependency-injected repository
+            _mapper = mapper;           // Dependency-injected mapper
         }
 
         // GET api/commands
@@ -33,7 +37,9 @@ namespace Commander.Controllers
         {
             var commandItems = _repository.GetAllCommands();
 
-            return Ok(commandItems);
+            // Maps the Command model to the CommandReadDto class
+            // Original form: Directly returned the commandItems, and not DTOs.
+            return Ok(_mapper.Map<CommandReadDto>(commandItems));
         }
 
         // GET api/commands/{id}
@@ -42,7 +48,14 @@ namespace Commander.Controllers
         {
             var commandItem = _repository.GetCommandById(id);
 
-            return Ok(commandItem);
+            // Changes the status code for a command not found from 204 to 404
+            if(commandItem == null)
+            {
+                return NotFound();
+            }
+
+            // Returns HTTP 200 status code
+            return Ok(_mapper.Map<CommandReadDto>(commandItem));
         }
     }
 }
