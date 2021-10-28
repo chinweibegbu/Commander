@@ -43,7 +43,7 @@ namespace Commander.Controllers
         }
 
         // GET api/commands/{id}
-        [HttpGet("{id}")] 
+        [HttpGet("{id}", Name = "GetCommandById")] 
         public ActionResult<Command> GetCommandById(int id)
         {
             var commandItem = _repository.GetCommandById(id);
@@ -76,8 +76,7 @@ namespace Commander.Controllers
 
             // Return route at which the object was created in the header
             // Alternative: Return Ok()
-            // return CreatedAtRoute(nameof(GetCommandById), new {Id = commandReadDto.Id}, commandReadDto);
-            return Ok(commandReadDto);
+            return CreatedAtRoute(nameof(GetCommandById), new {Id = commandReadDto.Id}, commandReadDto);
         }
     }
 }
