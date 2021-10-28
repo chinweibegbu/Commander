@@ -78,5 +78,31 @@ namespace Commander.Controllers
             // Alternative: Return Ok()
             return CreatedAtRoute(nameof(GetCommandById), new {Id = commandReadDto.Id}, commandReadDto);
         }
+
+        // PUT api/commands/{id}
+        [HttpPut("{id}")]
+        public ActionResult UpdateCommand(int id, CommandUpdateDto commandUpdateDto)
+        {
+            // Get the command to be updated using repository 
+            var commandToUpdate = _repository.GetCommandById(id);
+
+            // Check if the command is null and return NotFound (404) if it is null
+            if (commandToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            // Map (Update) the command to update from the DTO input
+            _mapper.Map(commandUpdateDto, commandToUpdate);
+
+            // Call the repository UpdateCommand() method
+            _repository.UpdateCommand(commandToUpdate);
+
+            // Save Changes
+            _repository.SaveChanges();
+
+            // Return NoContent (204)
+            return NoContent();
+        }
     }
 }

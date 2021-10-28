@@ -36,6 +36,10 @@ namespace Commander.Data
 
             _context.Commands.Add(cmd);
         }
+        void ICommanderRepo.UpdateCommand(Command cmd)
+        {
+            // This function does nothing because the _mapper.Map() function in the controller carries out the update in place
+        }
 
         bool ICommanderRepo.SaveChanges()
         {
