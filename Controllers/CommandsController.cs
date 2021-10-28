@@ -41,13 +41,13 @@ namespace Commander.Controllers
         }
 
         // GET api/commands/{id}
-        [HttpGet("{id}", Name = "GetCommandById")] 
+        [HttpGet("{id}", Name = "GetCommandById")]
         public ActionResult<Command> GetCommandById(int id)
         {
             var commandItem = _repository.GetCommandById(id);
 
             // Changes the status code for a command not found from 204 to 404
-            if(commandItem == null)
+            if (commandItem == null)
             {
                 return NotFound();
             }
@@ -74,7 +74,7 @@ namespace Commander.Controllers
 
             // Return route at which the object was created in the header
             // Alternative: Return Ok()
-            return CreatedAtRoute(nameof(GetCommandById), new {Id = commandReadDto.Id}, commandReadDto);
+            return CreatedAtRoute(nameof(GetCommandById), new { Id = commandReadDto.Id }, commandReadDto);
         }
 
         // PUT api/commands/{id}
@@ -102,7 +102,7 @@ namespace Commander.Controllers
             // Return NoContent (204)
             return NoContent();
         }
-        
+
         // PATCH api/commands/{id}
         [HttpPatch("{id}")]
         public ActionResult PartialUpdateCommand(int id, JsonPatchDocument<CommandUpdateDto> patchDoc)
@@ -137,7 +137,30 @@ namespace Commander.Controllers
             // Save changes
             _repository.SaveChanges();
 
-            // Return No content (204)
+            // Return NoContent (204)
+            return NoContent();
+        }
+
+        // DELETE api/controllers/{id}
+        [HttpDelete("{id}")]
+        public ActionResult DeleteCommand(int id)
+        {
+            // Get the command to delete
+            var commandToDelete = _repository.GetCommandById(id);
+
+            // Check if it is null
+            if (commandToDelete == null)
+            {
+                return NotFound();
+            }
+
+            // Delete using the repository
+            _repository.DeleteCommand(commandToDelete);
+
+            // Save changes
+            _repository.SaveChanges();
+
+            // Return NoContent (204)
             return NoContent();
         }
     }

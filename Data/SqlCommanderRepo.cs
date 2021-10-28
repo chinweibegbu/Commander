@@ -41,6 +41,16 @@ namespace Commander.Data
             // This function does nothing because the _mapper.Map() function in the controller carries out the update in place
         }
 
+        void ICommanderRepo.DeleteCommand(Command cmd)
+        {
+            if (cmd == null)
+            {
+                throw new ArgumentNullException(nameof(cmd));
+            }
+
+            _context.Commands.Remove(cmd);
+        }
+
         bool ICommanderRepo.SaveChanges()
         {
             return (_context.SaveChanges() >= 0);

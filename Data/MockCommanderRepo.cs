@@ -32,6 +32,11 @@ namespace Commander.Data
             throw new System.NotImplementedException();
         }
 
+        void ICommanderRepo.DeleteCommand(Command cmd)
+        {
+            throw new System.NotImplementedException();
+        }
+
         bool ICommanderRepo.SaveChanges()
         {
             throw new System.NotImplementedException();
