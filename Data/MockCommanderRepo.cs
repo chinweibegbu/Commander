@@ -22,5 +22,14 @@ namespace Commander.Data
             return new Command { Id = 0, HowTo = "Study hard", Line = "Graduating", Platform = "Ashesi University" };
         }
 
+        void ICommanderRepo.CreateCommand(Command cmd)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        bool ICommanderRepo.SaveChanges()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

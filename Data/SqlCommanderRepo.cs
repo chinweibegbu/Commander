@@ -26,5 +26,20 @@ namespace Commander.Data
             var commandItem = _context.Commands.FirstOrDefault(p => p.Id == id);
             return commandItem;
         }
+
+        void ICommanderRepo.CreateCommand(Command cmd)
+        {
+            if(cmd == null)
+            {
+                throw new ArgumentNullException(nameof(cmd));
+            }
+
+            _context.Commands.Add(cmd);
+        }
+
+        bool ICommanderRepo.SaveChanges()
+        {
+            return (_context.SaveChanges() >= 0);
+        }
     }
 }

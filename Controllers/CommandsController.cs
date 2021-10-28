@@ -39,7 +39,7 @@ namespace Commander.Controllers
 
             // Maps the Command model to the CommandReadDto class
             // Original form: Directly returned the commandItems, and not DTOs.
-            return Ok(_mapper.Map<CommandReadDto>(commandItems));
+            return Ok(_mapper.Map<IEnumerable<CommandReadDto>>(commandItems));
         }
 
         // GET api/commands/{id}
@@ -56,6 +56,28 @@ namespace Commander.Controllers
 
             // Returns HTTP 200 status code
             return Ok(_mapper.Map<CommandReadDto>(commandItem));
+        }
+
+        // POST api/commands
+        [HttpPost]
+        public ActionResult<CommandReadDto> CreateCommand(CommandWriteDto commandWriteDto)
+        {
+            // Map the Create DTO to the Command model
+            var commandModel = _mapper.Map<Command>(commandWriteDto);
+
+            // Add the model instance to the DB through the repository
+            _repository.CreateCommand(commandModel);
+
+            // Save changes to the DB
+            _repository.SaveChanges();
+
+            // Convert the model to a Read DTO to show the user the created model
+            var commandReadDto = _mapper.Map<CommandReadDto>(commandModel);
+
+            // Return route at which the object was created in the header
+            // Alternative: Return Ok()
+            // return CreatedAtRoute(nameof(GetCommandById), new {Id = commandReadDto.Id}, commandReadDto);
+            return Ok(commandReadDto);
         }
     }
 }

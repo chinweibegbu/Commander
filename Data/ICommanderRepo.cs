@@ -7,5 +7,7 @@ namespace Commander.Data
     {
         IEnumerable<Command> GetAllCommands();
         Command GetCommandById(int Id);
+        void CreateCommand(Command cmd);
+        bool SaveChanges();
     }
 }
