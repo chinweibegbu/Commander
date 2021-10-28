@@ -2,11 +2,9 @@
 using Commander.Data;
 using Commander.DTOs;
 using Commander.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Commander.Controllers
 {
@@ -102,6 +100,44 @@ namespace Commander.Controllers
             _repository.SaveChanges();
 
             // Return NoContent (204)
+            return NoContent();
+        }
+        
+        // PATCH api/commands/{id}
+        [HttpPatch("{id}")]
+        public ActionResult PartialUpdateCommand(int id, JsonPatchDocument<CommandUpdateDto> patchDoc)
+        {
+            // Get the command by ID from the repository
+            var commandToPatch = _repository.GetCommandById(id);
+
+            // Check if it is null and, if it is null, return a 404
+            if (commandToPatch == null)
+            {
+                return NotFound();
+            }
+
+            // Create a CommandUpdateDTO object using mapper
+            var commandUpdateDto = _mapper.Map<CommandUpdateDto>(commandToPatch);
+
+            // Apply patch to command update DTO
+            patchDoc.ApplyTo(commandUpdateDto, ModelState);
+
+            // Verify model state
+            if (!TryValidateModel(commandToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            // Update with mapper
+            _mapper.Map(commandUpdateDto, commandToPatch);
+
+            // Call repository update method (does nothing)
+            _repository.UpdateCommand(commandToPatch);
+
+            // Save changes
+            _repository.SaveChanges();
+
+            // Return No content (204)
             return NoContent();
         }
     }
